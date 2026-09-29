@@ -23,7 +23,7 @@ MARK="omacosy-omniwm"                     # rule-description prefix, removal key
 
 [ -f "$KARABINER" ] || { echo "no karabiner.json" >&2; exit 1; }
 
-TERMINAL=Ghostty BROWSER=Safari MUSIC=Spotify MESSENGER=Slack
+TERMINAL=Ghostty BROWSER= MUSIC=Spotify MESSENGER=Slack
 [ -f "$APPS" ] && . "$APPS" 2>/dev/null
 
 export KARABINER MARK TERMINAL BROWSER MUSIC MESSENGER
@@ -77,7 +77,7 @@ rules = slot_rules + [
     # omacosy-spawn preselects the omarchy insertion side and serializes
     # bursts — a bare `open -na` gives OmniWM's above-not-below spiral
     rule("terminal", "return_or_enter", SUPER, cmd=f"{home}/.local/bin/omacosy-spawn '{apps['TERMINAL']}'"),
-    rule("browser", "return_or_enter", SHIFT, cmd=f"open -a '{apps['BROWSER']}'"),
+    rule("browser", "return_or_enter", SHIFT, cmd=f"{home}/.local/bin/omacosy-browser"),
     # trial: OmniWM's command palette on the launcher chord (Raycast
     # parked — swap the two lines to go back)
     rule("launcher", "spacebar", SUPER, cmd="/opt/homebrew/bin/omniwmctl command open-command-palette >/dev/null 2>&1"),
@@ -95,6 +95,8 @@ rules = slot_rules + [
     rule("files", "f", SHIFT, cmd=f"{home}/.local/bin/omacosy-finder-window"),
     rule("music", "m", SHIFT, cmd=f"open -a '{apps['MUSIC']}'"),
     rule("messenger", "g", SHIFT, cmd=f"open -a '{apps['MESSENGER']}'"),
+    # the default mail app, or EMAIL when set — the same command aerospace runs
+    rule("email", "e", SHIFT, cmd=f"{home}/.local/bin/omacosy-open mailto"),
     # yazi, only where it is installed (see omacosy-files)
     *([rule("yazi", "y", SHIFT, cmd=f"{home}/.local/bin/omacosy-files")]
       if shutil.which("yazi") or os.path.exists("/opt/homebrew/bin/yazi") else []),
