@@ -288,17 +288,24 @@ read_apps() {
     case "$k" in
       TERMINAL) TERMINAL="$v" ;;
       BROWSER) BROWSER="$v" ;;
+      EMAIL) EMAIL="$v" ;;
       MUSIC) MUSIC="$v" ;;
       MESSENGER) MESSENGER="$v" ;;
     esac
   done < "$f"
 }
+# The apps the launch chords open. config/apps.conf holds the shipped
+# defaults and apps.local.conf overrides them; BROWSER and EMAIL are
+# deliberately left unset there, so those chords follow the macOS default
+# web browser and mail app (see bin/omacosy-browser, bin/omacosy-open)
+# until you name one.
+TERMINAL= BROWSER= EMAIL= MUSIC= MESSENGER=
 read_apps "$REPO_DIR/config/apps.conf"
 read_apps "$REPO_DIR/config/apps.local.conf"
 # Super+Shift+Y is bound only where yazi is installed: an optional tool gets
 # no chord that can only fail. Installing it later takes a re-run.
 if command -v yazi >/dev/null 2>&1 || [ -x /opt/homebrew/bin/yazi ]; then YAZI_LINE='s|^#yazi# ||'; else YAZI_LINE='/^#yazi# /d'; fi
-sed -e "s|@TERMINAL@|$TERMINAL|g" -e "s|@BROWSER@|$BROWSER|g" \
+sed -e "s|@TERMINAL@|$TERMINAL|g" \
     -e "s|@MUSIC@|$MUSIC|g" -e "s|@MESSENGER@|$MESSENGER|g" -e "$YAZI_LINE" \
   "$REPO_DIR/config/aerospace/aerospace.template.toml" > "$REPO_DIR/config/aerospace/aerospace.toml"
 
@@ -434,8 +441,8 @@ cp "$REPO_DIR/config/borders.conf" "$HOME/.config/omacosy/borders.conf"
 # app choices, RESOLVED (apps.local.conf already applied), for the same
 # reason: the bar's activity pill launches $TERMINAL and cannot read the
 # repo from a launchd agent when the clone is TCC-protected
-printf 'TERMINAL="%s"\nBROWSER="%s"\nMUSIC="%s"\nMESSENGER="%s"\n' \
-  "$TERMINAL" "$BROWSER" "$MUSIC" "$MESSENGER" > "$HOME/.config/omacosy/apps.conf"
+printf 'TERMINAL="%s"\nBROWSER="%s"\nEMAIL="%s"\nMUSIC="%s"\nMESSENGER="%s"\n' \
+  "$TERMINAL" "$BROWSER" "$EMAIL" "$MUSIC" "$MESSENGER" > "$HOME/.config/omacosy/apps.conf"
 
 cat > "$HOME/Library/LaunchAgents/com.omacosy.borders.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -507,6 +514,8 @@ link "$REPO_DIR/bin/omacosy-karabiner-omniwm" "$HOME/.local/bin/omacosy-karabine
 link "$REPO_DIR/bin/omacosy-layout" "$HOME/.local/bin/omacosy-layout"
 link "$REPO_DIR/bin/omacosy-float" "$HOME/.local/bin/omacosy-float"
 link "$REPO_DIR/bin/omacosy-finder-window" "$HOME/.local/bin/omacosy-finder-window"
+link "$REPO_DIR/bin/omacosy-browser" "$HOME/.local/bin/omacosy-browser"
+link "$REPO_DIR/bin/omacosy-open" "$HOME/.local/bin/omacosy-open"
 link "$REPO_DIR/bin/omacosy-cycle" "$HOME/.local/bin/omacosy-cycle"
 
 # --- 3. omarchy theme convention -------------------------------------------

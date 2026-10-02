@@ -150,14 +150,16 @@ each rebuild as a new app and you re-grant after every install.
 ## App choices
 
 Keybindings launch apps defined in `config/apps.conf`. Defaults are
-Ghostty, Safari, Spotify, Slack (terminal, browser, music, messenger).
-Override any of them in `config/apps.local.conf` (gitignored), then
-re-run `install.sh`:
+Ghostty, Spotify, Slack (terminal, music, messenger). The browser and
+mail chords have no app of their own: they open the macOS **default** web
+browser and mail app, asked at each press, so changing the default in
+System Settings takes effect with no reinstall. Override any app in
+`config/apps.local.conf` (gitignored), then re-run `install.sh`:
 
 ```sh
 # config/apps.local.conf — your picks win over apps.conf
 TERMINAL=Korren
-BROWSER=Arc
+BROWSER=Arc          # pins the browser chord; EMAIL pins the mail chord
 ```
 
 Your personal shell config belongs in `~/.zshrc.local`; the repo's
@@ -342,9 +344,9 @@ typing or app shortcuts. Caps Lock tapped alone is Escape.
 | `Super+r` | resize mode (`h/j/k/l`, `-`/`=`, `esc`) — AeroSpace only; OmniWM has no binding modes |
 | `Super+shift+;` | service mode (`esc` reload, `r` flatten, `⌫` close others) |
 | **Apps and system** | |
-| `Super+enter` / `Super+shift+enter` | terminal / browser |
+| `Super+enter` / `Super+shift+enter` | terminal / browser (the default browser) |
 | `Super+space` | launcher (Raycast; the OmniWM option opens OmniWM's command palette instead) |
-| `Super+shift+f` / `+m` / `+g` | files / music / messenger (set in `apps.conf`); files opens a NEW Finder window on every press |
+| `Super+shift+f` / `+m` / `+g` / `+e` | files / music / messenger / mail (set in `apps.conf`; mail is the default mail app); files opens a NEW Finder window on every press |
 | `Super+shift+t` | next theme |
 | `Super+shift+y` | yazi, a file manager, in a new Ghostty window (only when yazi is installed) |
 | `Super+shift+b` | next wallpaper of the current theme |
